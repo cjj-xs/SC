@@ -1,0 +1,57 @@
+;keyscan
+;one port with two switches, one connect to VCC , another connect to VSS
+
+IR_CH_SELECT	MACRO	;IO PA0
+	SET	#0,(IOC_PA)
+	CLR	#0,(DATA_PA)
+	LDMAH	#1
+	NOP
+	NOP
+	NOP
+	NOP
+	CLR	#0,(IOC_PA)
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	LD	A,(DATA_PA)
+	AND	A,#1
+	JNZ	RC_MODE_A
+	
+	SET	#0,(IOC_PA)
+	SET	#0,(DATA_PA)
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	CLR	#0(IOC_PA)
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	LD	A,(DATA_PA)
+	AND	A,#1
+	JZ	RC_MODE_C
+RC_MODE_B:
+	LD	A,#1
+	LD	(MODE_DAT),A
+	JMP	RC_MODE_END
+RC_MODE_A:
+	LD	A,#0
+	LD	(MODE_DAT),A
+	JMP	RC_MODE_END
+RC_MODE_C:
+	LD	A,#3
+	LD	(MODE_DAT),A
+RC_MODE_END:
+	ENDM
+	
